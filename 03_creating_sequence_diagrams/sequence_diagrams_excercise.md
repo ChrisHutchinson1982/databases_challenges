@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant t as terminal
     participant app as Main program (in app.rb)
@@ -21,3 +22,5 @@ sequenceDiagram
     end
     ar->>app: Returns arary of album objects
     app->>t: Prints list of albums to terminal
+
+  ```
