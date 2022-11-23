@@ -142,39 +142,97 @@ Using comments, define the method signatures (arguments and return value) and wh
 # Table name: students
 
 # Repository class
-# (in lib/student_repository.rb)
+# (in lib/user_repository.rb)
 
-class StudentRepository
+class UserRepository
 
   # Selecting all records
   # No arguments
   def all
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students;
+    # SELECT id, user_name, email_address FROM users;
 
-    # Returns an array of Student objects.
+    # Returns an array of User objects.
   end
 
   # Gets a single record by its ID
   # One argument: the id (number)
   def find(id)
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students WHERE id = $1;
+    # SELECT id, user_name, email_address FROM user WHERE id = $1;
 
-    # Returns a single Student object.
+    # Returns a single User object.
   end
 
-  # Add more methods below for each operation you'd like to implement.
+  # Inserts a new user record
+  # Takes a User object as an argument
+  def create(user)
+     # Executes the SQL query:
+     # INSERT INTO users (username, email_address) VALUES($1, $2),
+     # Doesn't need to return anything, just creates a user
+  end
 
-  # def create(student)
-  # end
+  def delete(user)
+    # Executes the SQL query:
+    # DELETE FROM users WHERE id = $1;
+    # Doesn't need to return anything, just deletes a user
+  end
 
-  # def update(student)
-  # end
+  def update(user)
+    # Executes the SQL query:
+    # UPDATE users SET username = $1 , email_address = $2 WHERE id = $3;   
+    # Doesn't need to return anything, just updates a user
+  end
 
-  # def delete(student)
-  # end
 end
+
+
+
+class PostRepository
+
+  # Selecting all records
+  # No arguments
+  def all
+    # Executes the SQL query:
+    # SELECT id, title, content, user_id FROM posts;
+
+    # Returns an array of Post objects.
+  end
+
+  # Gets a single record by its ID
+  # One argument: the id (number)
+  def find(id)
+    # Executes the SQL query:
+    # SELECT id, title, content, user_id FROM user WHERE id = $1;
+
+    # Returns a single Post object.
+  end
+
+  # Inserts a new post record
+  # Takes a Post object as an argument
+  def create(user)
+     # Executes the SQL query:
+     # INSERT INTO posts (title, content, user_id) VALUES($1, $2, $3),
+     # Doesn't need to return anything, just creates a post
+  end
+
+  def delete(user)
+    # Executes the SQL query:
+    # DELETE FROM posts WHERE id = $1;
+    # Doesn't need to return anything, just deletes a post
+  end
+
+  def update(user)
+    # Executes the SQL query:
+    # UPDATE posts SET title = $1 , content = $2 , user_id = $3 WHERE id = $4;    
+    # Doesn't need to return anything, just updates a post
+  end
+
+end
+
+
+
+
 ```
 
 ## 6. Write Test Examples
@@ -187,32 +245,33 @@ These examples will later be encoded as RSpec tests.
 # EXAMPLES
 
 # 1
-# Get all students
+# Get all users
 
-repo = StudentRepository.new
+repo = UserRepository.new
 
-students = repo.all
+users = repo.all
 
-students.length # =>  2
+user.length # =>  2
 
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
+users[0].id # =>  1
+users[0].username # =>  'Jo1234'
+users[0].email_address # =>  'jo1234@fakeemail.co.uk'
 
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
+users[1].id # =>  2
+users[1].username # =>  'Bloggs1234'
+users[1].email_address # =>  'bloggs4567@fakeemail.co.uk'
 
 # 2
-# Get a single student
+# Get a single user
 
-repo = StudentRepository.new
+repo = UserRepository.new
 
-student = repo.find(1)
+user = repo.find(1)
 
-student.id # =>  1
-student.name # =>  'David'
-student.cohort_name # =>  'April 2022'
+user.id # =>  1
+user.username # =>  'Jo1234'
+user.email_address # =>  'jo1234@fakeemail.co.uk'
+
 
 # Add more examples for each method
 ```
@@ -228,17 +287,17 @@ This is so you get a fresh table contents every time you run the test suite.
 ```ruby
 # EXAMPLE
 
-# file: spec/student_repository_spec.rb
+# file: spec/user_repository_spec.rb
 
-def reset_students_table
-  seed_sql = File.read('spec/seeds_students.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'students' })
+def reset_user_table
+  seed_sql = File.read('spec/seeds_social_network.sql')
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'social_network_test' })
   connection.exec(seed_sql)
 end
 
-describe StudentRepository do
+describe UserRepository do
   before(:each) do 
-    reset_students_table
+    reset_users_table
   end
 
   # (your tests will go here).

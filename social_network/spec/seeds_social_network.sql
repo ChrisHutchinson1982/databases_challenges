@@ -1,5 +1,4 @@
 TRUNCATE TABLE users RESTART IDENTITY CASCADE; 
--- TRUNCATE TABLE posts RESTART IDENTITY; 
 
 INSERT INTO 
   users (username, email_address) 
