@@ -1,32 +1,25 @@
 class UserRepository
 
-  # Selecting all records
-  # No arguments
   def all
     sql = 'SELECT * FROM users;'
     result_set = DatabaseConnection.exec_params(sql, [])
     users = []
     result_set.each do |record|
-      user = User.new
-      user.id = record["id"].to_i
-      user.username = record["username"]
-      user.email_address = record['email_address']
-      users << user
+      users << record_user_object(record)
     end
 
     return users
-
-    # Returns an array of User objects.
   end
 
-  # Gets a single record by its ID
-  # One argument: the id (number)
-  # def find(id)
-  #   # Executes the SQL query:
-  #   # SELECT id, user_name, email_address FROM user WHERE id = $1;
-
-  #   # Returns a single User object.
-  # end
+  def find(id)
+    # Executes the SQL query:
+    sql = 'SELECT id, username, email_address FROM users WHERE id = $1;'
+    params = [id]
+    result_set = DatabaseConnection.exec_params(sql, params)
+    record = result_set[0]
+  
+    return record_user_object(record)
+  end
 
   # # Inserts a new user record
   # # Takes a User object as an argument
@@ -47,5 +40,16 @@ class UserRepository
   #   # UPDATE users SET username = $1 , email_address = $2 WHERE id = $3;   
   #   # Doesn't need to return anything, just updates a user
   # end
+
+  private
+
+  def record_user_object(record)
+    user = User.new
+    user.id = record["id"].to_i
+    user.username = record["username"]
+    user.email_address = record['email_address']
+
+    return user
+  end
 
 end

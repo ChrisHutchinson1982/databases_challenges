@@ -17,7 +17,7 @@ RSpec.describe UserRepository do
       repo = UserRepository.new
       users = repo.all
       expect(users.length).to eq 2
-      # expect(users[0].id).to eq 1
+      expect(users[0].id).to eq 1
       expect(users[0].username).to eq 'Jo1234'
       expect(users[0].email_address).to eq 'jo1234@fakeemail.co.uk'
       expect(users[1].id).to eq 2
@@ -25,7 +25,7 @@ RSpec.describe UserRepository do
       expect(users[1].email_address).to eq 'bloggs4567@fakeemail.co.uk'
     end
 
-    xit "get a single user" do 
+    it "get a single user" do 
       repo = UserRepository.new
       user = repo.find(1)
       expect(user.id).to eq 1
