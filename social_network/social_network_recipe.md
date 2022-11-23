@@ -35,9 +35,8 @@ If seed data is provided (or you already created it), you can skip this step.
 -- so we can start with a fresh state.
 -- (RESTART IDENTITY resets the primary key)
 
-TRUNCATE TABLE posts RESTART IDENTITY; 
-
-TRUNCATE TABLE users RESTART IDENTITY; -- replace with your own table name.
+TRUNCATE TABLE users RESTART IDENTITY CASCADE; 
+ -- replace with your own table name.
 
 -- Below this line there should only be `INSERT` statements.
 -- Replace these statements with your own seed data.
@@ -79,14 +78,25 @@ Usually, the Model class name will be the capitalised table name (single instead
 # Table name: students
 
 # Model class
-# (in lib/student.rb)
-class Student
+# (in lib/user.rb)
+class User
 end
 
 # Repository class
-# (in lib/student_repository.rb)
-class StudentRepository
+# (in lib/user_repository.rb)
+class UserRepository
 end
+
+# Model class
+# (in lib/post.rb)
+class Post
+end
+
+# Repository class
+# (in lib/post_repository.rb)
+class PostRepository
+end
+
 ```
 
 ## 4. Implement the Model class
@@ -100,10 +110,14 @@ Define the attributes of your Model class. You can usually map the table columns
 # Model class
 # (in lib/student.rb)
 
-class Student
-
+class User
   # Replace the attributes by your own columns.
-  attr_accessor :id, :name, :cohort_name
+  attr_accessor :id, :user_name, :email_address
+end
+
+class Post
+  # Replace the attributes by your own columns.
+  attr_accessor :id, :title, :content, :number_of_views, :user_id
 end
 
 # The keyword attr_accessor is a special Ruby feature
