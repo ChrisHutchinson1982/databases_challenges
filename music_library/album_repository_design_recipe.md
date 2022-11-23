@@ -132,8 +132,12 @@ class AlbumRepository
 
   # Add more methods below for each operation you'd like to implement.
 
-  # def create(student)
-  # end
+  def create(album)
+    # Executes the SQL query:
+
+    # INSERT INTO albums (title, release_year, artist_id) VALUES($1, $2, $3)
+    # Doesn't need to return anything (only creates a record)
+  end
 
   # def update(student)
   # end
@@ -183,6 +187,24 @@ album = repo.find(2)
 
 album.title # => 'Waterloo'
 album.release_year # =>  '1974'
+
+# 4 Creates a single album
+
+repository = AlbumRepository.new
+
+album = Album.new
+album.title = 'Trompe le Monde'
+album.release_year = 1991
+album.artist_id = 1
+
+repository.create(album) # => nil
+
+all_albums = repository.all
+
+last_album = all_albums.last
+last_album.title # => 'Trompe le Monde'
+last_album.release_year # => '1991'
+last_album.artist_id # => 1
 
 
 ```
