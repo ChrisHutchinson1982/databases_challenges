@@ -70,9 +70,13 @@ Usually, the Model class name will be the capitalised table name (single instead
 class Student
 end
 
+# (in lib/cohort.rb)
+class Cohort
+end
+
 # Repository class
-# (in lib/student_repository.rb)
-class StudentRepository
+# (in lib/cohort_repository.rb)
+class CohortRepository
 end
 ```
 
@@ -90,7 +94,15 @@ Define the attributes of your Model class. You can usually map the table columns
 class Student
 
   # Replace the attributes by your own columns.
-  attr_accessor :id, :name, :cohort_name
+  attr_accessor :id, :name, :cohort_id
+end
+
+class Cohort
+  attr_accessor :id, :name, :starting_date, :students
+
+  def initialize
+    @students = []
+  end
 end
 
 # The keyword attr_accessor is a special Ruby feature
@@ -117,36 +129,28 @@ Using comments, define the method signatures (arguments and return value) and wh
 # Repository class
 # (in lib/student_repository.rb)
 
-class StudentRepository
+class CohortRepository
 
-  # Selecting all records
-  # No arguments
-  def all
-    # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students;
+  
 
-    # Returns an array of Student objects.
-  end
-
-  # Gets a single record by its ID
+  # Gets a list of records by its ID
   # One argument: the id (number)
-  def find(id)
+  def find_with_students(id)
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students WHERE id = $1;
+        # SELECT 	cohorts.id,
+    # 	cohorts.name,
+    # 	cohorts.starting_date,
+    # 	students.id AS student_id,
+    # 	students.name AS student_name
+    # FROM cohorts
+    # JOIN students 
+    # ON students.cohort_id = cohorts.id
+    # WHERE cohorts.id = $1; 
 
-    # Returns a single Student object.
+    # Returns an array of Cohort objects.
   end
 
-  # Add more methods below for each operation you'd like to implement.
 
-  # def create(student)
-  # end
-
-  # def update(student)
-  # end
-
-  # def delete(student)
-  # end
 end
 ```
 
@@ -160,34 +164,15 @@ These examples will later be encoded as RSpec tests.
 # EXAMPLES
 
 # 1
-# Get all students
+# Find cohort 1 with related students
 
-repo = StudentRepository.new
+repo = CohortRepository.new
+cohort = repo.find_with_students(1)
 
-students = repo.all
+cohort.name # => Cohort 1
+cohort.albums.length  => 3
+cohort.albums[0].student_name # =>  'Name 1'
 
-students.length # =>  2
-
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
-
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
-
-# 2
-# Get a single student
-
-repo = StudentRepository.new
-
-student = repo.find(1)
-
-student.id # =>  1
-student.name # =>  'David'
-student.cohort_name # =>  'April 2022'
-
-# Add more examples for each method
 ```
 
 Encode this example as a test.
@@ -201,7 +186,7 @@ This is so you get a fresh table contents every time you run the test suite.
 ```ruby
 # EXAMPLE
 
-# file: spec/student_repository_spec.rb
+# file: spec/cohort_repository_spec.rb
 
 def reset_students_table
   seed_sql = File.read('spec/seeds_students.sql')
