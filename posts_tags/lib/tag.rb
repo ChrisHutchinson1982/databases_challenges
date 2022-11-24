@@ -1,3 +1,7 @@
 class Tag
-  attr_accessor :id, :name
+  attr_accessor :id, :name, :posts
+
+  def initialize
+    @posts = []
+  end
 end

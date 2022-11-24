@@ -109,10 +109,6 @@ class Tag
   attr_accessor :id, :name
 end
 
-class PostTag
-  # Replace the attributes by your own columns.
-  attr_accessor :post_id, :tag_id
-end
 
 # The keyword attr_accessor is a special Ruby feature
 # which allows us to set and get attributes on an object,
