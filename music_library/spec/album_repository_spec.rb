@@ -19,7 +19,7 @@ RSpec.describe AlbumRepository do
     expect(albums.length).to eq 2
     expect(albums.first.id).to eq 1
     expect(albums.first.title).to eq 'Doolittle'
-    expect(albums[1].release_year).to eq '1974'
+    expect(albums[1].release_year).to eq 1974
     expect(albums.first.artist_id).to eq 1
   end
 
@@ -28,31 +28,35 @@ RSpec.describe AlbumRepository do
     repo = AlbumRepository.new
     album = repo.find(1)
     expect(album.title).to eq 'Doolittle'
-    expect(album.release_year).to eq '1989'
+    expect(album.release_year).to eq 1989
   end
   
   it "get a single album" do
     repo = AlbumRepository.new
     album = repo.find(2)
     expect(album.title).to eq 'Waterloo'
-    expect(album.release_year).to eq '1974'
+    expect(album.release_year).to eq 1974
   end
 
   it "creates a new album" do
     repository = AlbumRepository.new
-    album = Album.new
-    album.title = 'Trompe le Monde'
-    album.release_year = 1991
-    album.artist_id = 1
+    new_album = Album.new
+    new_album.title = 'Trompe le Monde'
+    new_album.release_year = 1991
+    new_album.artist_id = 1
 
-    repository.create(album) # => nil
+    repository.create(new_album)
 
     all_albums = repository.all
 
-    last_album = all_albums.last
-    expect(last_album.title).to eq('Trompe le Monde')
-    expect(last_album.release_year).to eq ('1991')
-    expect(last_album.artist_id).to eq(1)
+    expect(all_albums).to include (
+      have_attributes(
+        title: new_album.title,
+        release_year: new_album.release_year,
+        artist_id: new_album.artist_id, 
+      )
+    )
+
   end
 
 end

@@ -132,6 +132,8 @@ class AlbumRepository
 
   # Add more methods below for each operation you'd like to implement.
 
+  # Insert new album 
+  # album is a new Album object
   def create(album)
     # Executes the SQL query:
 
@@ -188,7 +190,7 @@ album = repo.find(2)
 album.title # => 'Waterloo'
 album.release_year # =>  '1974'
 
-# 4 Creates a single album
+# 4 Creates a new album
 
 repository = AlbumRepository.new
 
