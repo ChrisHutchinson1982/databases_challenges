@@ -1,3 +1,3 @@
-class PostTags
+class PostTag
   attr_accessor :post_id, :tag_id
 end

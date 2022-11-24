@@ -99,17 +99,17 @@ Define the attributes of your Model class. You can usually map the table columns
 # Model class
 # (in lib/student.rb)
 
-class Posts
+class Post
   # Replace the attributes by your own columns.
   attr_accessor :id, :title
 end
 
-class Tags
+class Tag
   # Replace the attributes by your own columns.
   attr_accessor :id, :name
 end
 
-class PostTags
+class PostTag
   # Replace the attributes by your own columns.
   attr_accessor :post_id, :tag_id
 end
@@ -138,36 +138,22 @@ Using comments, define the method signatures (arguments and return value) and wh
 # Repository class
 # (in lib/student_repository.rb)
 
-class StudentRepository
+class TagRepository
 
-  # Selecting all records
-  # No arguments
-  def all
+  
+  def find_by_post(post_id)
+    # This method should accept a post ID, and return an array of related Tag objects.
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students;
-
-    # Returns an array of Student objects.
-  end
-
-  # Gets a single record by its ID
-  # One argument: the id (number)
-  def find(id)
-    # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students WHERE id = $1;
+    # SELECT tags.id, tags.name, posts.title
+        # FROM tags
+        # JOIN posts_tags ON posts_tags.tag_id = tags.id
+        # JOIN posts ON posts_tags.post_id = posts.id
+        # WHERE posts.id = $1;
 
     # Returns a single Student object.
   end
 
-  # Add more methods below for each operation you'd like to implement.
-
-  # def create(student)
-  # end
-
-  # def update(student)
-  # end
-
-  # def delete(student)
-  # end
+  
 end
 ```
 
@@ -181,32 +167,17 @@ These examples will later be encoded as RSpec tests.
 # EXAMPLES
 
 # 1
-# Get all students
+# Takes a post ID and return an array of related Tag objects.
 
-repo = StudentRepository.new
+repo = TagRepository.new
+post = repo.find_by_post(1)
 
-students = repo.all
+post.title # => My amazing post'
+post.tags.length  => 2
+post.tags[0].name # =>  'poetry'
 
-students.length # =>  2
 
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
 
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
-
-# 2
-# Get a single student
-
-repo = StudentRepository.new
-
-student = repo.find(1)
-
-student.id # =>  1
-student.name # =>  'David'
-student.cohort_name # =>  'April 2022'
 
 # Add more examples for each method
 ```
@@ -222,17 +193,17 @@ This is so you get a fresh table contents every time you run the test suite.
 ```ruby
 # EXAMPLE
 
-# file: spec/student_repository_spec.rb
+# file: spec/tag_repository_spec.rb
 
-def reset_students_table
-  seed_sql = File.read('spec/seeds_students.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'students' })
+def reset_tags_table
+  seed_sql = File.read('spec/seeds.sql')
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'posts_tags_test' })
   connection.exec(seed_sql)
 end
 
-describe StudentRepository do
+describe TagRepository do
   before(:each) do 
-    reset_students_table
+    reset_tags_table
   end
 
   # (your tests will go here).
