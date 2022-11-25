@@ -320,6 +320,86 @@ updated_user.username # => 'JoBloggs'
 updated_user.email_adrres # => 'jobloggs1234@fakeemail.co.uk'
 
 # Add more examples for each method
+
+
+
+# EXAMPLES
+
+# 1
+# Get all users
+
+repo = UserRepository.new
+
+users = repo.all
+
+user.length # =>  2
+
+users[0].id # =>  1
+users[0].username # =>  'Jo1234'
+users[0].email_address # =>  'jo1234@fakeemail.co.uk'
+
+users[1].id # =>  2
+users[1].username # =>  'Bloggs1234'
+users[1].email_address # =>  'bloggs4567@fakeemail.co.uk'
+
+# 2
+# Get a single user
+
+repo = UserRepository.new
+
+user = repo.find(1)
+
+user.id # =>  1
+user.username # =>  'Jo1234'
+user.email_address # =>  'jo1234@fakeemail.co.uk'
+
+
+# 3
+# Create a single user
+
+repo = UserRepository.new
+
+user = user.new
+user.username = 'Fred9999'
+user.email_address = 'Fred9999@fakeemail.co.uk'
+
+repository.create(user) # => nil
+
+all_users = repository.all
+
+last_user = all_users.last
+last_user.username # => ''Fred9999'
+last_user.email_address # => 'Fred9999@fakeemail.co.uk'
+
+# 4
+# Deleting a single user
+
+repo = UserRepository.new
+
+id_to_delete = 1
+
+repo.delete(id_to_delete)
+
+all_users = repo.all
+all_users.length # => 1
+all_users.first.id # => 2
+
+# 5
+# Update a single record
+
+repo = UserRepository.new
+
+user = repo.find(1)
+
+user.username = 'JoBloggs'
+user.email_address = 'jobloggs1234@fakeemail.co.uk'
+
+repo.update(user)
+
+updated_user = repo.find(1)
+updated_user.username # => 'JoBloggs'
+updated_user.email_adrres # => 'jobloggs1234@fakeemail.co.uk'
+
 ```
 
 Encode this example as a test.
